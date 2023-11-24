@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useStore } from '../store';
 import Button from './Button';
 import Display from './Display';
 import History from './History';
+import { useStore } from '../store/store';
 
 const CalculatorWrapper = styled.div`
   max-width: 300px;
@@ -15,35 +15,34 @@ const CalculatorWrapper = styled.div`
 `;
 
 const Calculator = () => {
-  const { expression, setResult, history, addToHistory } = useStore();
+  const { expression, result, history, setExpression, setResult, addToHistory } = useStore();
 
   const handleButtonClick = (value) => {
-    setResult((prevExpression) => prevExpression + value);
+    setExpression((prevExpression) => prevExpression + value);
   };
 
   const handleCalculate = () => {
     try {
-      const result = new Function('return ' + expression)();
-      setResult(result.toString());
-
-      // Save to history if '=' is pressed (up to 3 times)
-      addToHistory(result);
+      const resultValue = new Function('return ' + expression)();
+      setResult(resultValue.toString());
+      addToHistory(resultValue.toString());
     } catch (error) {
       setResult('Error');
     }
   };
 
   const handleClear = () => {
+    setExpression('');
     setResult('');
   };
 
   const handleBackspace = () => {
-    setResult((prevExpression) => prevExpression.slice(0, -1));
+    setExpression((prevExpression) => prevExpression.slice(0, -1));
   };
 
   return (
     <CalculatorWrapper>
-      <Display expression={expression} />
+      <Display expression={expression} result={result} />
       <Button onClick={() => handleButtonClick('1')}>1</Button>
       <Button onClick={() => handleButtonClick('2')}>2</Button>
       <Button onClick={() => handleButtonClick('3')}>3</Button>
@@ -62,13 +61,9 @@ const Calculator = () => {
       <Button onClick={() => handleClear()}>C</Button>
       <Button onClick={() => handleBackspace()}>←</Button>
       <Button onClick={() => handleButtonClick('/')}>/</Button>
-
-      {/* Display the calculation history */}
       <History history={history} />
     </CalculatorWrapper>
   );
 };
 
 export default Calculator;
-
-//다람쥐

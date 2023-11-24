@@ -2,22 +2,23 @@ import React from 'react';
 import styled from 'styled-components';
 
 const HistoryWrapper = styled.div`
-  margin-top: 20px;
-`;
-
-const HistoryItem = styled.div`
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
 `;
 
 const History = ({ history }) => {
   return (
-    <HistoryWrapper>
-      <p>Calculation History:</p>
-      {history.map((item, index) => (
-        <HistoryItem key={index}>{item}</HistoryItem>
-      ))}
-    </HistoryWrapper>
+    <>
+      {history && history.length > 0 && (
+        <HistoryWrapper>
+          <div>Calculation History:</div>
+          {history.map((item, index) => (
+            <div key={index}>{item}</div>
+          ))}
+        </HistoryWrapper>
+      )}
+    </>
   );
 };
 
